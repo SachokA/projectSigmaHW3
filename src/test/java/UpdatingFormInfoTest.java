@@ -108,18 +108,17 @@ public class UpdatingFormInfoTest  {
         sendText(numberElement, homeNumberTelephone);
 
         driver.findElement(By.xpath(buttonSaveLocator)).click();
-        Thread.sleep(10000);
 
         driver.navigate().refresh();
 
-        Thread.sleep(10000);
+        Thread.sleep(5000);
 
-        Assertions.assertEquals(street1, driver.findElement(By.xpath(street1Locator)).getText());
-        Assertions.assertEquals(street2, driver.findElement(By.xpath(street2Locator)).getText());
-        Assertions.assertEquals(state, driver.findElement(By.xpath(stateLocator)).getText());
-        Assertions.assertEquals(city, driver.findElement(By.xpath(cityLocator)).getText());
-        Assertions.assertEquals("city", driver.findElement(By.xpath(countryLocator)).getText());
-        Assertions.assertEquals(homeNumberTelephone, driver.findElement(By.xpath(homeTelephoneLocator)).getText());
+        Assertions.assertEquals(street1, driver.findElement(By.xpath(street1Locator)).getAttribute("value"));
+        Assertions.assertEquals(street2, driver.findElement(By.xpath(street2Locator)).getAttribute("value"));
+        Assertions.assertEquals(state, driver.findElement(By.xpath(stateLocator)).getAttribute("value"));
+        Assertions.assertEquals(city, driver.findElement(By.xpath(cityLocator)).getAttribute("value"));
+        Assertions.assertEquals("Afghanistan", driver.findElement(By.xpath(countryLocator)).getText());
+        Assertions.assertEquals(homeNumberTelephone, driver.findElement(By.xpath(homeTelephoneLocator)).getAttribute("value"));
     }
 
     @AfterEach
