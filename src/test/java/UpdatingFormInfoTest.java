@@ -108,10 +108,11 @@ public class UpdatingFormInfoTest  {
         sendText(numberElement, homeNumberTelephone);
 
         driver.findElement(By.xpath(buttonSaveLocator)).click();
+        Thread.sleep(10000);
 
         driver.navigate().refresh();
 
-        Thread.sleep(3000);
+        Thread.sleep(10000);
 
         Assertions.assertEquals(street1, driver.findElement(By.xpath(street1Locator)).getText());
         Assertions.assertEquals(street2, driver.findElement(By.xpath(street2Locator)).getText());
