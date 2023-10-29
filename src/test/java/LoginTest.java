@@ -2,14 +2,20 @@
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class LoginTest extends BaseTest {
+import java.time.Duration;
+
+public class LoginTest {
 
     final static String userNameInputLocator = "//input[@name='username']";
     final static String userPasswordInputLocator = "//input[@name='password']";
     final static String buttonSubmitLocator = "//button[@type='submit']";
-    final  String forgottenPasswordLocator = "//p[contains(@class,'login-forgot')]";
+    final String forgottenPasswordLocator = "//p[contains(@class,'login-forgot')]";
     final String formForgottenPasswordLocator = "//h6[contains(@class,'forgot-password-title')]";
     final String formForgottenPasswordInputUserNameLocator = "//input[@name='username' and @placeholder='Username']";
     final String formForgottenPasswordButtonCancelLocator = "//button[@type='button']";
@@ -21,6 +27,23 @@ public class LoginTest extends BaseTest {
 
     final String expectedURLForgottenPassword = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/requestPasswordResetCode";
     final String expectedTitleFormForgottenPassword = "Reset Password";
+
+
+    private WebDriver driver;
+    private WebDriverWait wait;
+    final static String BASEURL = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login";
+
+    @BeforeEach
+//    @BeforeAll
+    public void setUpBrowser() {
+        ChromeOptions options = new ChromeOptions();
+        options.setImplicitWaitTimeout(Duration.ofSeconds(10));
+        options.addArguments("--disable-notifications");
+        driver = new ChromeDriver(options);
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.manage().window().maximize();
+        driver.get(BASEURL);
+    }
 
 
     @Test
@@ -41,9 +64,7 @@ public class LoginTest extends BaseTest {
     @Test
     public void validationFormResetPasswordTest() {
 
-        setWaitAndClick(forgottenPasswordLocator);
-
-//        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(forgottenPasswordLocator))).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(forgottenPasswordLocator))).click();
 
         String actualUrlForgottenPassword = driver.getCurrentUrl();
 
@@ -66,17 +87,23 @@ public class LoginTest extends BaseTest {
     @Test
     public void changedPasswordTest() {
 
-        setWaitAndClick(forgottenPasswordLocator);
-
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(forgottenPasswordLocator))).click();
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath(formForgottenPasswordInputUserNameLocator))).sendKeys(userName);
         driver.findElement(By.xpath(formForgottenPasswordButtonSubmitLocator)).click();
 
         String actualTitleForm = wait.until(ExpectedConditions
                 .elementToBeClickable(By.xpath(formForgottenPasswordLocator))).getText();
 
-        Assertions.assertEquals("Reset Password link sent successfully",actualTitleForm);
+        Assertions.assertEquals("Reset Password link sent successfully", actualTitleForm);
 
     }
 
+    @AfterEach
+//    @AfterAll
+    public  void quit() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
 
 }

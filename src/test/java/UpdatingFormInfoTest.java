@@ -1,12 +1,20 @@
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class UpdatingFormInfoTest extends BaseTest {
+import java.time.Duration;
+
+public class UpdatingFormInfoTest  {
 
     final String myInfoLocator = "//span[text()='My Info']";
 
@@ -26,27 +34,45 @@ public class UpdatingFormInfoTest extends BaseTest {
     final String state = "state";
 
     final String homeNumberTelephone = "123456789";
-    Actions actions = new Actions(driver);
+
+    private WebDriver driver;
+    private WebDriverWait wait;
+    final static String BASEURL = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login";
+    @BeforeEach
+//    @BeforeAll
+    public void setUpBrowser() {
+        ChromeOptions options = new ChromeOptions();
+        options.setImplicitWaitTimeout(Duration.ofSeconds(10));
+        options.addArguments("--disable-notifications");
+        driver = new ChromeDriver(options);
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.manage().window().maximize();
+        driver.get(BASEURL);
+    }
 
     public void cleanField(WebElement element) {
+        Actions actions = new Actions(driver);
         actions.click(element).keyDown(Keys.CONTROL).sendKeys("a").keyUp(Keys.CONTROL).sendKeys(Keys.BACK_SPACE).perform();
     }
 
     public void sendText(WebElement element, String value) {
+        Actions actions = new Actions(driver);
         actions.sendKeys(element, value).build().perform();
     }
 
-
     @Test
     public void updatingTestWithValidDate() throws InterruptedException {
+        Actions actions = new Actions(driver);
 
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(LoginTest.userNameInputLocator))).sendKeys(LoginTest.userName);
+       wait.until(ExpectedConditions.elementToBeClickable(By.xpath(LoginTest.userNameInputLocator))).sendKeys(LoginTest.userName);
 
-        driver.findElement(By.xpath(LoginTest.userPasswordInputLocator)).sendKeys(LoginTest.userPassword);
+       driver.findElement(By.xpath(LoginTest.userPasswordInputLocator)).sendKeys(LoginTest.userPassword);
         driver.findElement(By.xpath(LoginTest.buttonSubmitLocator)).click();
 
-        setWaitAndClick(myInfoLocator);
-        setWaitAndClick(contactDetailsLocator);
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(myInfoLocator))).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(contactDetailsLocator))).click();
+
 
         Thread.sleep(3000);
 
@@ -76,7 +102,7 @@ public class UpdatingFormInfoTest extends BaseTest {
         actions.sendKeys(Keys.ARROW_DOWN).build().perform();
         actions.sendKeys(Keys.ENTER).build().perform();
 
-        WebElement numberElement = driver.findElement(By.xpath(homeTelephoneLocator));
+        WebElement numberElement =driver.findElement(By.xpath(homeTelephoneLocator));
 
         cleanField(numberElement);
         sendText(numberElement, homeNumberTelephone);
@@ -93,5 +119,13 @@ public class UpdatingFormInfoTest extends BaseTest {
         Assertions.assertEquals(city, driver.findElement(By.xpath(cityLocator)).getText());
         Assertions.assertEquals("city", driver.findElement(By.xpath(countryLocator)).getText());
         Assertions.assertEquals(homeNumberTelephone, driver.findElement(By.xpath(homeTelephoneLocator)).getText());
+    }
+
+    @AfterEach
+//    @AfterAll
+    public  void quit() {
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }
