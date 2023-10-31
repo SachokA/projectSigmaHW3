@@ -27,8 +27,10 @@ public class UpdatingFormInfoTest  {
 
     final String homeTelephoneLocator = "//label[.='Home']/../following-sibling::div/input";
     final String buttonSaveLocator = "//button[@type='submit' and normalize-space(text()='Save')]";
+    final String messageSuccessfullySaveLocator = "//div[@id='oxd-toaster_1']";
 
     final String street1 = "street1";
+
     final String street2 = "street2";
     final String city = "city";
     final String state = "state";
@@ -108,6 +110,9 @@ public class UpdatingFormInfoTest  {
         sendText(numberElement, homeNumberTelephone);
 
         driver.findElement(By.xpath(buttonSaveLocator)).click();
+
+        WebElement messageSuccessfullySave = driver.findElement(By.xpath(messageSuccessfullySaveLocator));
+        wait.until(ExpectedConditions.invisibilityOf(messageSuccessfullySave));
 
         driver.navigate().refresh();
 
