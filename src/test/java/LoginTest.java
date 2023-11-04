@@ -49,7 +49,8 @@ public class LoginTest {
     @Test
     public void loginTestWithValidDate() {
 
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(userNameInputLocator))).sendKeys(userName);
+
+        driver.findElement(By.xpath(userNameInputLocator)).sendKeys(userName);
         driver.findElement(By.xpath(userPasswordInputLocator)).sendKeys(userPassword);
         driver.findElement(By.xpath(buttonSubmitLocator)).click();
 
@@ -64,12 +65,10 @@ public class LoginTest {
     @Test
     public void validationFormResetPasswordTest() {
 
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(forgottenPasswordLocator))).click();
+        driver.findElement(By.xpath(forgottenPasswordLocator)).click();
 
         String actualUrlForgottenPassword = driver.getCurrentUrl();
-
-        String actualTitleForm = wait.until(ExpectedConditions
-                .elementToBeClickable(By.xpath(formForgottenPasswordLocator))).getText();
+        String actualTitleForm = driver.findElement(By.xpath(formForgottenPasswordLocator)).getText();
 
         Assertions.assertEquals(expectedURLForgottenPassword, actualUrlForgottenPassword);
         Assertions.assertEquals(expectedTitleFormForgottenPassword, actualTitleForm);
@@ -87,20 +86,18 @@ public class LoginTest {
     @Test
     public void changedPasswordTest() {
 
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(forgottenPasswordLocator))).click();
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(formForgottenPasswordInputUserNameLocator))).sendKeys(userName);
+        driver.findElement(By.xpath(forgottenPasswordLocator)).click();
+        driver.findElement(By.xpath(formForgottenPasswordInputUserNameLocator)).sendKeys(userName);
         driver.findElement(By.xpath(formForgottenPasswordButtonSubmitLocator)).click();
 
-        String actualTitleForm = wait.until(ExpectedConditions
-                .elementToBeClickable(By.xpath(formForgottenPasswordLocator))).getText();
+        String actualTitleForm = driver.findElement(By.xpath(formForgottenPasswordLocator)).getText();
 
         Assertions.assertEquals("Reset Password link sent successfully", actualTitleForm);
-
     }
 
     @AfterEach
 //    @AfterAll
-    public  void quit() {
+    public void quit() {
         if (driver != null) {
             driver.quit();
         }

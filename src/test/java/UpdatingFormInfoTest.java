@@ -67,15 +67,11 @@ public class UpdatingFormInfoTest {
     public void updatingTestWithValidDate() throws InterruptedException {
         Actions actions = new Actions(driver);
 
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(LoginTest.userNameInputLocator))).sendKeys(LoginTest.userName);
-
+        driver.findElement(By.xpath(LoginTest.userNameInputLocator)).sendKeys(LoginTest.userName);
         driver.findElement(By.xpath(LoginTest.userPasswordInputLocator)).sendKeys(LoginTest.userPassword);
         driver.findElement(By.xpath(LoginTest.buttonSubmitLocator)).click();
-
-
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(myInfoLocator))).click();
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(contactDetailsLocator))).click();
-
+        driver.findElement(By.xpath(myInfoLocator)).click();
+        driver.findElement(By.xpath(contactDetailsLocator)).click();
 
         Thread.sleep(3000);
 
