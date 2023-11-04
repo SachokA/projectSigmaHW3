@@ -14,7 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class UpdatingFormInfoTest  {
+public class UpdatingFormInfoTest {
 
     final String myInfoLocator = "//span[text()='My Info']";
 
@@ -40,6 +40,7 @@ public class UpdatingFormInfoTest  {
     private WebDriver driver;
     private WebDriverWait wait;
     final static String BASEURL = "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login";
+
     @BeforeEach
 //    @BeforeAll
     public void setUpBrowser() {
@@ -66,9 +67,9 @@ public class UpdatingFormInfoTest  {
     public void updatingTestWithValidDate() throws InterruptedException {
         Actions actions = new Actions(driver);
 
-       wait.until(ExpectedConditions.elementToBeClickable(By.xpath(LoginTest.userNameInputLocator))).sendKeys(LoginTest.userName);
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(LoginTest.userNameInputLocator))).sendKeys(LoginTest.userName);
 
-       driver.findElement(By.xpath(LoginTest.userPasswordInputLocator)).sendKeys(LoginTest.userPassword);
+        driver.findElement(By.xpath(LoginTest.userPasswordInputLocator)).sendKeys(LoginTest.userPassword);
         driver.findElement(By.xpath(LoginTest.buttonSubmitLocator)).click();
 
 
@@ -104,7 +105,7 @@ public class UpdatingFormInfoTest  {
         actions.sendKeys(Keys.ARROW_DOWN).build().perform();
         actions.sendKeys(Keys.ENTER).build().perform();
 
-        WebElement numberElement =driver.findElement(By.xpath(homeTelephoneLocator));
+        WebElement numberElement = driver.findElement(By.xpath(homeTelephoneLocator));
 
         cleanField(numberElement);
         sendText(numberElement, homeNumberTelephone);
@@ -112,11 +113,10 @@ public class UpdatingFormInfoTest  {
         driver.findElement(By.xpath(buttonSaveLocator)).click();
 
         WebElement messageSuccessfullySave = driver.findElement(By.xpath(messageSuccessfullySaveLocator));
-        wait.until(ExpectedConditions.invisibilityOf(messageSuccessfullySave));
+        wait.until(ExpectedConditions.visibilityOf(messageSuccessfullySave));
 
         driver.navigate().refresh();
-
-        Thread.sleep(5000);
+        wait.until(ExpectedConditions.textToBePresentInElementValue(driver.findElement(By.xpath(street1Locator)), street1));
 
         Assertions.assertEquals(street1, driver.findElement(By.xpath(street1Locator)).getAttribute("value"));
         Assertions.assertEquals(street2, driver.findElement(By.xpath(street2Locator)).getAttribute("value"));
@@ -128,7 +128,7 @@ public class UpdatingFormInfoTest  {
 
     @AfterEach
 //    @AfterAll
-    public  void quit() {
+    public void quit() {
         if (driver != null) {
             driver.quit();
         }
